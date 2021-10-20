@@ -7,6 +7,8 @@ target 'News' do
 
   # Pods for News
 pod 'SVProgressHUD'
+pod 'RealmSwift', '~> 5.5.1'
+
 
   target 'NewsTests' do
     inherit! :search_paths
