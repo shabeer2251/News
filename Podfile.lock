@@ -1,26 +1,16 @@
 PODS:
-  - Realm (5.5.1):
-    - Realm/Headers (= 5.5.1)
-  - Realm/Headers (5.5.1)
-  - RealmSwift (5.5.1):
-    - Realm (= 5.5.1)
   - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
-  - RealmSwift (~> 5.5.1)
   - SVProgressHUD
 
 SPEC REPOS:
   trunk:
-    - Realm
-    - RealmSwift
     - SVProgressHUD
 
 SPEC CHECKSUMS:
-  Realm: c2ffe0667f9c98c9ba65f608ba85684d39826145
-  RealmSwift: 5a35c1c35c3e1925e6fcd092c881d5cc4a826bff
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: c929566d62fc75c2a05dc49fd0d494444fa9bd7c
+PODFILE CHECKSUM: 56dda1639fd891b31ffb3ca311de932a910419d1
 
 COCOAPODS: 1.10.2
