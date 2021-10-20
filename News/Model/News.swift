@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Article: Codable {
+class Article: Codable {
     var articles: [News]
     var status: String?
     enum codigKeys: String, CodingKey {
@@ -16,12 +16,14 @@ struct Article: Codable {
     }
 }
 
-struct News: Codable {
+class News: Codable {
     var author: String?
     var title: String?
     var imageUrl: String?
     var content: String?
     var detailsUrl: String?
+    var description: String?
+    var imagedata: Data?
     
     enum CodingKeys: String, CodingKey {
         case author = "author"
@@ -29,5 +31,6 @@ struct News: Codable {
         case imageUrl = "urlToImage"
         case content = "content"
         case detailsUrl = "url"
+        case description = "description"
     }
 }

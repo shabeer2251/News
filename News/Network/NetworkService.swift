@@ -42,4 +42,19 @@ class NetworkService {
             }
         }.resume()
     }
+    
+    func getImage(url: String?, callBack: @escaping (Data?, Error?) -> Void) {
+        guard let urlString = url, let url = URL(string: urlString) else { return }
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if error != nil {
+                callBack(nil, error)
+            } else {
+                guard let data = data else {
+                    callBack(nil, error)
+                    return }
+                callBack(data, nil)
+            }
+        }.resume()
+        
+    }
 }

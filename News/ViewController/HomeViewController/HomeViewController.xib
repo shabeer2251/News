@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController" customModule="News" customModuleProvider="target">
             <connections>
+                <outlet property="tableView" destination="z0X-ur-5DN" id="uwL-Vf-AxL"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,8 +18,20 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="z0X-ur-5DN">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+            </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="z0X-ur-5DN" secondAttribute="trailing" id="M7q-D7-dz3"/>
+                <constraint firstItem="z0X-ur-5DN" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Y07-gB-SGH"/>
+                <constraint firstAttribute="bottom" secondItem="z0X-ur-5DN" secondAttribute="bottom" id="h4O-au-qDS"/>
+                <constraint firstItem="z0X-ur-5DN" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="jAd-Qk-TRu"/>
+            </constraints>
             <point key="canvasLocation" x="20" y="104"/>
         </view>
     </objects>

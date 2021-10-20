@@ -9,6 +9,7 @@ import UIKit
 
 enum AppTransition {
     case mainScreen
+    case fullNewsScreen(news: News)
 }
 
 class AppCoordinator {
@@ -32,9 +33,20 @@ class AppCoordinator {
     func performTransition(transition: AppTransition) {
         switch transition {
         case .mainScreen:
-           let viewModel = HomeViewModel()
-           let viewController = HomeViewController(viewModel: viewModel)
+            let viewModel = HomeViewModel(delegate: self)
+            let viewController = HomeViewController(viewModel: viewModel)
             rootViewController.pushViewController(viewController, animated: true)
+        case .fullNewsScreen(let news):
+            let viewModel = FullNewsViewModel(news: news)
+            let viewController = FullNewsViewController(viewModel: viewModel)
+            rootViewController.present(viewController, animated: true, completion: nil)
         }
+    }
+
+}
+
+extension AppCoordinator: HomeViewnavigationDelegate {
+    func handleSeeFullNewsTapped(news: News) {
+        performTransition(transition: .fullNewsScreen(news: news))
     }
 }
