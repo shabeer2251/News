@@ -39,7 +39,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="newsIcon" width="200" height="150"/>
+        <image name="newsIcon" width="114" height="100.5"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
