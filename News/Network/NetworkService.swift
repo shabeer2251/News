@@ -26,6 +26,7 @@ class NetworkService {
         let endPoint = "top-headlines"
         let apiKey = Constants.getApiAccessKey
         guard let url = URL(string: baseUrl + endPoint + "?country=in&apikey=" + apiKey) else { return }
+        print(url)
         URLSession.shared.dataTask(with: url) { data, response, error in
             if error != nil {
                 callBack(nil, error)
@@ -44,7 +45,9 @@ class NetworkService {
     }
     
     func getImage(url: String?, callBack: @escaping (Data?, Error?) -> Void) {
-        guard let urlString = url, let url = URL(string: urlString) else { return }
+        guard let urlString = url, let url = URL(string: urlString) else {
+            callBack(nil, nil)
+            return }
         URLSession.shared.dataTask(with: url) { data, response, error in
             if error != nil {
                 callBack(nil, error)

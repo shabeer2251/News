@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SeeFullNewsDelegate: class{
+protocol SeeFullNewsDelegate: class {
     func seeFullNewsTapped(index: Int)
 }
 
@@ -34,7 +34,6 @@ class HomeViewControllerTableViewCell: UITableViewCell {
     }
     
     func setupUI() {
-        //TODO: improve the ui as per required design.
         StyleKit.applyRoundCornersAndShadowAroundView(view: backGroundView)
         StyleKit.applyMediumLabelStyle(label: nameLabel, color: .appLabel)
         StyleKit.applyBoldLabelStyle(label: titleLabel, color: .appLabel)

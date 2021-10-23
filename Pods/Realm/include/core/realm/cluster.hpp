@@ -30,7 +30,7 @@ namespace realm {
 
 class Spec;
 class Table;
-class ConstObj;
+class Obj;
 class Cluster;
 class ClusterNodeInner;
 class ClusterTree;
@@ -57,7 +57,12 @@ public:
         int64_t split_key; // When a node is split, this variable holds the value of the
                            // first key in the new node. (Relative to the key offset)
         MemRef mem;        // MemRef to the Cluster holding the new/found object
-        size_t index;      // The index within the Cluster at which the object is stored.
+        size_t index = realm::npos; // The index within the Cluster at which the object is stored.
+
+        operator bool() const
+        {
+            return index != realm::npos;
+        }
     };
 
     struct IteratorState {
@@ -67,7 +72,7 @@ public:
         }
         IteratorState(const IteratorState&);
         void clear();
-        void init(const ConstObj&);
+        void init(State&, ObjKey);
 
         Cluster& m_current_leaf;
         int64_t m_key_offset = 0;
@@ -135,7 +140,7 @@ public:
     /// Locate object identified by 'ndx' and update 'state' accordingly
     virtual ObjKey get(size_t ndx, State& state) const = 0;
     /// Return the index at which key is stored
-    virtual size_t get_ndx(ObjKey key, size_t ndx) const = 0;
+    virtual size_t get_ndx(ObjKey key, size_t ndx) const noexcept = 0;
 
     /// Erase element identified by 'key'
     virtual size_t erase(ObjKey key, CascadeState& state) = 0;
@@ -168,6 +173,14 @@ public:
     }
 
 protected:
+#if REALM_MAX_BPNODE_SIZE > 256
+    static constexpr int node_shift_factor = 8;
+#else
+    static constexpr int node_shift_factor = 2;
+#endif
+
+    static constexpr size_t cluster_node_size = 1 << node_shift_factor;
+
     const ClusterTree& m_tree_top;
     ClusterKeyArray m_keys;
     uint64_t m_offset;
@@ -181,9 +194,12 @@ public:
     }
     ~Cluster() override;
 
-    void create(size_t nb_leaf_columns); // Note: leaf columns - may include holes
+    static MemRef create_empty_cluster(Allocator& alloc);
+
+    void create(); // Note: leaf columns - may include holes
     void init(MemRef mem) override;
     void update_from_parent() noexcept override;
+
     bool is_writeable() const
     {
         return !Array::is_read_only();
@@ -250,7 +266,7 @@ public:
     ref_type insert(ObjKey k, const FieldValues& init_values, State& state) override;
     bool try_get(ObjKey k, State& state) const override;
     ObjKey get(size_t, State& state) const override;
-    size_t get_ndx(ObjKey key, size_t ndx) const override;
+    size_t get_ndx(ObjKey key, size_t ndx) const noexcept override;
     size_t erase(ObjKey k, CascadeState& state) override;
     void nullify_incoming_links(ObjKey key, CascadeState& state) override;
     void upgrade_string_to_enum(ColKey col, ArrayString& keys);
@@ -262,6 +278,9 @@ public:
     void dump_objects(int64_t key_offset, std::string lead) const override;
 
 private:
+    friend class ClusterTree;
+    friend class TableClusterTree;
+
     static constexpr size_t s_key_ref_or_size_index = 0;
     static constexpr size_t s_first_col_index = 1;
 
@@ -269,7 +288,6 @@ private:
     {
         return size_t(Array::get(s_key_ref_or_size_index)) >> 1; // Size is stored as tagged value
     }
-    friend class ClusterTree;
     void insert_row(size_t ndx, ObjKey k, const FieldValues& init_values);
     void move(size_t ndx, ClusterNode* new_node, int64_t key_adj) override;
     template <class T>
@@ -283,8 +301,11 @@ private:
     template <class T>
     void do_erase(size_t ndx, ColKey col);
     void remove_backlinks(ObjKey origin_key, ColKey col, const std::vector<ObjKey>& keys, CascadeState& state) const;
+    void remove_backlinks(ObjKey origin_key, ColKey col, const std::vector<ObjLink>& links,
+                          CascadeState& state) const;
     void do_erase_key(size_t ndx, ColKey col, CascadeState& state);
     void do_insert_key(size_t ndx, ColKey col, Mixed init_val, ObjKey origin_key);
+    void do_insert_link(size_t ndx, ColKey col, Mixed init_val, ObjKey origin_key);
     template <class T>
     void set_spec(T&, ColKey::Idx) const;
     template <class ArrayType>

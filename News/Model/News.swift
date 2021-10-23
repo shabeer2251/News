@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 class Article: Codable {
     var articles: [News]
@@ -16,14 +17,15 @@ class Article: Codable {
     }
 }
 
-class News: Codable {
-    var author: String?
-    var title: String?
-    var imageUrl: String?
-    var content: String?
-    var detailsUrl: String?
-    var description: String?
-    var imagedata: Data?
+class News: Object, Codable {
+    @objc dynamic var author: String?
+    @objc dynamic var title: String?
+    @objc dynamic var imageUrl: String?
+    @objc dynamic var content: String?
+    @objc dynamic var detailsUrl: String?
+    @objc dynamic var newsDescription: String?
+    @objc dynamic var imagedata: Data?
+    @objc dynamic var publishedAt: String?
     
     enum CodingKeys: String, CodingKey {
         case author = "author"
@@ -31,6 +33,7 @@ class News: Codable {
         case imageUrl = "urlToImage"
         case content = "content"
         case detailsUrl = "url"
-        case description = "description"
+        case newsDescription = "description"
+        case publishedAt = "publishedAt"
     }
 }

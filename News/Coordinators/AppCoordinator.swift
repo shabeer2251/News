@@ -10,6 +10,7 @@ import UIKit
 enum AppTransition {
     case mainScreen
     case fullNewsScreen(news: News)
+    case animationScreen
 }
 
 class AppCoordinator {
@@ -36,9 +37,19 @@ class AppCoordinator {
             let viewModel = HomeViewModel(delegate: self)
             let viewController = HomeViewController(viewModel: viewModel)
             rootViewController.pushViewController(viewController, animated: true)
+        
         case .fullNewsScreen(let news):
             let viewModel = FullNewsViewModel(news: news)
             let viewController = FullNewsViewController(viewModel: viewModel)
+            rootViewController.modalPresentationStyle = .fullScreen
+            rootViewController.modalTransitionStyle = .crossDissolve
+            rootViewController.present(viewController, animated: true, completion: nil)
+        
+        case .animationScreen:
+            let viewModel = AnimationViewModel()
+            let viewController = AnimationViewController(viewModel: viewModel)
+            rootViewController.modalPresentationStyle = .fullScreen
+            rootViewController.modalTransitionStyle = .crossDissolve
             rootViewController.present(viewController, animated: true, completion: nil)
         }
     }
@@ -48,5 +59,9 @@ class AppCoordinator {
 extension AppCoordinator: HomeViewnavigationDelegate {
     func handleSeeFullNewsTapped(news: News) {
         performTransition(transition: .fullNewsScreen(news: news))
+    }
+    
+    func handleViewAnimation() {
+        performTransition(transition: .animationScreen)
     }
 }

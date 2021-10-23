@@ -35,18 +35,27 @@ class HomeViewController: UIViewController {
                 self?.tableView.reloadData()
             }
         }
-    
-        viewModel.getTrendingNews()
+        
+        viewModel.showHideLoading = { [weak self] shouldShow in
+            DispatchQueue.main.async {
+                if shouldShow {
+                    DialogUtils.showLoading()
+                } else {
+                    DialogUtils.hideLoading()
+                }
+            }
+        }
     }
     
     func setupUI() {
-        DialogUtils.showLoading()
         tableView.backgroundColor = .appBackground
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "HomeViewControllerTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeViewControllerTableViewCell")
+        tableView.register(UINib(nibName: "HomeViewControllerTableSectionHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "HomeViewControllerTableSectionHeaderView")
         tableView.estimatedRowHeight = 250
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.sectionHeaderHeight = 80
     }
 }
 
@@ -59,14 +68,21 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeViewControllerTableViewCell", for: indexPath) as? HomeViewControllerTableViewCell else { return UITableViewCell() }
-        let dataSource = self.viewModel.dataSource[indexPath.row]
+        if let dataSource = self.viewModel.fetchData(at: indexPath.row) {
         var image: UIImage?
         if let data = dataSource.imagedata {
             image = UIImage(data: data)
         }
         cell.delegate = viewModel
         cell.tag = indexPath.row
-        cell.setupCell(title: dataSource.title, name: dataSource.author, description: dataSource.description, image: image)
+        cell.setupCell(title: dataSource.title, name: dataSource.author, description: dataSource.newsDescription, image: image)
+        }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HomeViewControllerTableSectionHeaderView") as? HomeViewControllerTableSectionHeaderView
+        view?.delegate = viewModel
+        return view
     }
 }

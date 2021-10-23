@@ -7,6 +7,7 @@
 
 
 import UIKit
+import RealmSwift
 
 extension UIColor {
     static var appBackground: UIColor {
@@ -36,3 +37,14 @@ extension UIColor {
     
 }
 
+extension List {
+    subscript (safe index: Int) -> Element? {
+        return indices ~= index ? self[index] : nil
+    }
+}
+
+extension Array {
+    subscript (safe index: Int) -> Element? {
+        return indices ~= index ? self[index] : nil
+    }
+}

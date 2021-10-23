@@ -44,16 +44,8 @@ class FullNewsViewController: UIViewController {
     }
     
     func setupUI() {
-        //DialogUtils.showLoading()
         StyleKit.applyMediumLabelStyle(label: titleLabel, color: .appLabel)
         titleLabel.text = viewModel.news.title
-        webView.navigationDelegate = self
     }
     
-}
-
-extension FullNewsViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        //DialogUtils.hideLoading()
-    }
 }
