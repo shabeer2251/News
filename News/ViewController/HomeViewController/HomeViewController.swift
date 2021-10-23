@@ -37,12 +37,11 @@ class HomeViewController: UIViewController {
         }
         
         viewModel.showHideLoading = { [weak self] shouldShow in
-            DispatchQueue.main.async {
-                if shouldShow {
-                    DialogUtils.showLoading()
-                } else {
-                    DialogUtils.hideLoading()
-                }
+            guard let _ = self else { return }
+            if shouldShow {
+                DialogUtils.showLoading()
+            } else {
+                DialogUtils.hideLoading()
             }
         }
     }

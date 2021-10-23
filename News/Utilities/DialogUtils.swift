@@ -10,12 +10,16 @@ import SVProgressHUD
 
 class DialogUtils {
     static func showLoading() {
-        SVProgressHUD.dismiss()
-        SVProgressHUD.show(withStatus: "Loading...")
-        SVProgressHUD.setDefaultMaskType(.black)
+        DispatchQueue.main.async {
+            SVProgressHUD.dismiss()
+            SVProgressHUD.show(withStatus: "Loading...")
+            SVProgressHUD.setDefaultMaskType(.black)
+        }
     }
     
     static func hideLoading() {
-        SVProgressHUD.dismiss()
+        DispatchQueue.main.async {
+            SVProgressHUD.dismiss()
+        }
     }
 }
